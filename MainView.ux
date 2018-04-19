@@ -1,0 +1,37 @@
+<App Model="App">
+  <DockPanel>
+    <ScrollView ux:Name="scrollSwipe"  UserScroll="false">
+      <WhileTrue Value="{hasNext}">
+        <SwipeGesture Direction="Up" LengthNode="scrollSwipe" ux:Name="swipeUp" Type="Simple"/>
+        <SwipingAnimation Source="swipeUp">
+          <Move Target="itemList" Y="height(scrollSwipe) * -1" Duration="0.5" />
+        </SwipingAnimation>
+
+        <Swiped How="ToActive" Source="swipeUp">
+          <Set scrollSwipe.ScrollPosition="0, {currentIndex + 1} * height(scrollSwipe)" />
+          <Callback Handler="{forward}" />
+        </Swiped>
+      </WhileTrue>
+
+      <WhileTrue Value="{currentIndex > 0}">
+        <SwipeGesture Direction="Down" LengthNode="scrollSwipe" ux:Name="swipeDown" Type="Simple"/>
+        <SwipingAnimation Source="swipeDown">
+          <Move Target="itemList" Y="height(scrollSwipe)" Duration="0.5" />
+        </SwipingAnimation>
+        <Swiped How="ToActive" Source="swipeDown">
+          <Set scrollSwipe.ScrollPosition="0, {currentIndex - 1} * height(scrollSwipe)" />
+          <Callback Handler="{backward}" />
+        </Swiped>
+      </WhileTrue>
+      <StackPanel ux:Name="itemList">
+        <Each Items="{items}" Reuse="Frame">
+          <Deferred>
+            <Rectangle Width="100%" StrokeWidth="5" StrokeColor="#03A9F4" StrokeAlignment="Inside" Height="height(this)">
+              <Text Alignment="Center" FontSize="40">{{index}}</Text>
+            </Rectangle>
+          </Deferred>
+        </Each>
+      </StackPanel>
+    </ScrollView>
+  </DockPanel>
+</App>
